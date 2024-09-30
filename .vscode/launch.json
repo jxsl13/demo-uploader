@@ -1,0 +1,30 @@
+{
+    // Verwendet IntelliSense zum Ermitteln möglicher Attribute.
+    // Zeigen Sie auf vorhandene Attribute, um die zugehörigen Beschreibungen anzuzeigen.
+    // Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Package",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/.",
+            "args": [
+                "--file-regex", ".*",
+                "--watch-folder", "${workspaceFolder}/tmp",
+                "--webhook-url", "${input:WEBHOOK}", // WEBHOOK="https://discord.com/api/webhooks/..." in .vscode/.env
+                "--upload-timeout", "1m",
+            ],
+            "envFile": "${workspaceFolder}/.vscode/.env",
+        },
+    ],
+    "inputs": [
+        {
+            "id": "WEBHOOK",
+            "type": "promptString",
+            "description": "Enter the webhook URL",
+            "default": "https://discord.com/api/webhooks/..."
+        }
+    ]
+}
