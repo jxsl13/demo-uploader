@@ -2,10 +2,6 @@ package main
 
 import "time"
 
-func newTimer() (timer *time.Timer, drained bool) {
-	return time.NewTimer(0), false
-}
-
 // closeTimer should be used as a deferred function
 // in order to cleanly shut down a timer
 func closeTimer(timer *time.Timer, drained *bool) {

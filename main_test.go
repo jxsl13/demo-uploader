@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"os"
+	"regexp"
 	"testing"
 	"time"
 
@@ -19,7 +20,9 @@ func TestWatch(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
 
-	err := Watch(ctx, webhookUrl, watchPath, ".*", time.Second*10)
+	re := regexp.MustCompile(".*")
+
+	err := Watch(ctx, webhookUrl, watchPath, re, time.Second*10)
 	if err != nil {
 		t.Fatal(err)
 	}

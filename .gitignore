@@ -3,3 +3,4 @@ __debug_bin*
 .DS_Store
 .vscode/.env*
 *.env*
+demo-uploader
