@@ -22,7 +22,7 @@ func TestWatch(t *testing.T) {
 
 	re := regexp.MustCompile(".*")
 
-	err := Watch(ctx, webhookUrl, watchPath, re, time.Second*10)
+	err := Watch(ctx, webhookUrl, watchPath, re, time.Second*10, 0)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,7 +30,7 @@ func TestWatch(t *testing.T) {
 
 func TestUpload(t *testing.T) {
 	filePath := testutils.FilePath("tmp/test.txt")
-	err := Upload(webhookUrl, filePath)
+	err := Upload(webhookUrl, filePath, 0)
 	if err != nil {
 		t.Fatal(err)
 	}

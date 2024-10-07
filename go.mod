@@ -3,6 +3,7 @@ module github.com/jxsl13/demo-uploader
 go 1.23.1
 
 require (
+	github.com/alecthomas/units v0.0.0-20240927000941-0f3dac36c52b
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/go-resty/resty/v2 v2.15.3
 	github.com/jxsl13/cli-config-boilerplate v0.1.0

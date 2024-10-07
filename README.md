@@ -27,6 +27,7 @@ Environment variables:
   FILE_REGEX        The regex to match specific file names only (default: ".*\\.demo$")
   WEBHOOK_URL       Discord webhook url to upload the file to
   UPLOAD_TIMEOUT    how long to wait for the file to be untouched before uploading (default: "5m0s")
+  SIZE_LIMIT        The maximum size of the zipped file to upload (e.g. MB, KB, MiB, KiB). Set to 0B to disable (default: "10MB")
 
 Usage:
   demo-uploader [flags]
@@ -35,6 +36,7 @@ Flags:
   -c, --config string             .env config file path (or via env variable CONFIG)
       --file-regex string         The regex to match specific file names only (default ".*\\.demo$")
   -h, --help                      help for demo-uploader
+      --size-limit string         The maximum size of the zipped file to upload (e.g. MB, KB, MiB, KiB). Set to 0B to disable (default "10MB")
       --upload-timeout duration   how long to wait for the file to be untouched before uploading (default 5m0s)
       --watch-folder string       The folder to watch for file changes
       --webhook-url string        Discord webhook url to upload the file to

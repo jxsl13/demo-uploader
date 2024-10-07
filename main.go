@@ -58,10 +58,16 @@ func (cli *CLI) PrerunE(cmd *cobra.Command) func(*cobra.Command, []string) error
 }
 
 func (cli *CLI) RunE(cmd *cobra.Command, args []string) error {
-	return Watch(cli.ctx, cli.cfg.WebhookUrl, cli.cfg.WatchFolder, cli.cfg.FileRegexp, cli.cfg.UploadTimeout)
+	return Watch(cli.ctx,
+		cli.cfg.WebhookUrl,
+		cli.cfg.WatchFolder,
+		cli.cfg.FileRegexp,
+		cli.cfg.UploadTimeout,
+		cli.cfg.SizeLimitBytes,
+	)
 }
 
-func Watch(ctx context.Context, webhookUrl, watchPath string, regex *regexp.Regexp, uploadTimeout time.Duration) error {
+func Watch(ctx context.Context, webhookUrl, watchPath string, regex *regexp.Regexp, uploadTimeout time.Duration, sizeLimitBytes int64) error {
 	var lwm *LastWriteMap
 	lwm = NewLastWriteMap(ctx, func(filePath string, deadline time.Time) error {
 		fi, err := os.Lstat(filePath)
@@ -76,7 +82,7 @@ func Watch(ctx context.Context, webhookUrl, watchPath string, regex *regexp.Rege
 		diff := now.Sub(fi.ModTime())
 		if diff >= uploadTimeout {
 			// upload if file has not been touched in the last minute
-			err = Upload(webhookUrl, filePath)
+			err = Upload(webhookUrl, filePath, sizeLimitBytes)
 			if err != nil {
 				return fmt.Errorf("error while uploading file: %s: %w", filePath, err)
 			}
@@ -134,12 +140,21 @@ func Watch(ctx context.Context, webhookUrl, watchPath string, regex *regexp.Rege
 	}
 }
 
-func Upload(webhookUrl, filePath string) error {
+func Upload(webhookUrl, filePath string, sizeLimitBytes int64) error {
 	zippedName, err := ZipFile(filePath)
 	if err != nil {
 		return fmt.Errorf("error while zipping file: %s: %w", filePath, err)
 	}
 	defer os.Remove(zippedName)
+
+	fi, err := os.Stat(zippedName)
+	if err != nil {
+		return fmt.Errorf("error while trying to access zipped file: %s: %w", zippedName, err)
+	}
+
+	if sizeLimitBytes > 0 && fi.Size() >= sizeLimitBytes {
+		return fmt.Errorf("file size exceeds limit of %d bytes: %s: %d bytes", sizeLimitBytes, zippedName, fi.Size())
+	}
 
 	log.Println("uploading zipped file:", zippedName)
 

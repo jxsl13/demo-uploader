@@ -11,20 +11,15 @@
             "mode": "auto",
             "program": "${workspaceFolder}/.",
             "args": [
-                "--file-regex", ".*",
+                "--file-regex", ".*\\.demo",
                 "--watch-folder", "${workspaceFolder}/tmp",
-                "--webhook-url", "${input:WEBHOOK}", // WEBHOOK="https://discord.com/api/webhooks/..." in .vscode/.env
-                "--upload-timeout", "1m",
+                "--upload-timeout", "5s",
+                "--size-limit", "1B",
             ],
+            /*
+                WEBHOOK_URL="https://discord.com/api/webhooks/12345....
+            */
             "envFile": "${workspaceFolder}/.vscode/.env",
         },
-    ],
-    "inputs": [
-        {
-            "id": "WEBHOOK",
-            "type": "promptString",
-            "description": "Enter the webhook URL",
-            "default": "https://discord.com/api/webhooks/..."
-        }
     ]
 }
